@@ -1,0 +1,12 @@
+{
+  "test": {
+    "prefix": "test",
+    "body": ["display: flex;", "justify-content: center;", "align-items: center;"],
+    "description": "CSS Flexbox居中"
+  },
+  "Flexbox Center": {
+    "prefix": "flex-center",
+    "body": ["display: flex;", "justify-content: center;", "align-items: center;"],
+    "description": "CSS Flexbox居中"
+  }
+}

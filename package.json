@@ -1,0 +1,40 @@
+{
+  "name": "striver-snippets",
+  "displayName": "striver-snippets",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "contributes": {
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/js.code-snippets"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/js.code-snippets"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/js.code-snippets"
+      },
+      {
+        "language": "css",
+        "path": "./snippets/css.code-snippets"
+      },
+      {
+        "language": "less",
+        "path": "./snippets/css.code-snippets"
+      },
+      {
+        "language": "scss",
+        "path": "./snippets/css.code-snippets"
+      }
+    ]
+  }
+}

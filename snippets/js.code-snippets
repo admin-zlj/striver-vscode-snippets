@@ -1,0 +1,7 @@
+{
+  "Print test": {
+    "prefix": "ttt",
+    "body": ["console.log('test');"],
+    "description": "test"
+  }
+}
