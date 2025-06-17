@@ -1,0 +1,51 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Snippets README 更新指南
+
+## 目的
+
+1. 此规则用于确保 [README.md](mdc:README.md) 文件与 snippets 目录中的实际代码片段保持同步。
+
+## 更新流程
+
+1. snippets 目录结构：
+
+   - [jsx-tsx.code-snippets](mdc:snippets/jsx-tsx.code-snippets) - JavaScript/TypeScript 相关代码片段
+   - [css.code-snippets](mdc:snippets/css.code-snippets) - CSS/Less/SCSS 相关代码片段
+   - [company.code-snippets](mdc:snippets/company.code-snippets) - 公司专用代码片段
+
+2. README.md 文件结构：
+
+   - 代码片段使用指南部分应与 snippets 目录中的内容保持一致
+   - 每个代码片段的描述应包含：
+     - 触发前缀
+     - 中文说明
+     - 代码示例（超过五行以上的不展示）
+
+3. 更新规则：
+
+   - 当在 snippets 目录中添加新的代码片段时，需要在 README.md 中相应的部分添加对应的说明
+   - 当修改现有代码片段时，需要同步更新 README.md 中的示例代码
+   - 保持分类结构的一致性：
+     - JavaScript/TypeScript/React 相关代码片段
+     - CSS 相关代码片段
+     - 公司专用代码片段
+
+4. 格式规范：
+   - 代码片段说明使用无序列表（-）格式
+   - 代码示例使用 `javascript 或 `css 格式化
+   - 保持现有的分类层级结构（使用 ###）
+
+## 注意事项
+
+- 确保 README.md 中的代码示例与实际代码片段输出完全一致
+- 保持中文说明的简洁性和可理解性
+- 维护现有的文档结构和格式
+
+## 绝对绝对不能违背的事项
+
+- [README.md](mdc:README.md) 已经的介绍的 snippet 中，只有发生变化的 snippet 可以更改，无变动的不要更改。
+- body 超过五行的 snippet 不展示代码示例。
