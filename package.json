@@ -2,7 +2,7 @@
   "name": "striver-snippets",
   "displayName": "Striver Snippets",
   "description": "一个 vscode 代码片段插件，包含js ts tsx css less scss 的常用snippets，便于平时开发。",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "striver",
   "engines": {
     "vscode": "^1.8.0"

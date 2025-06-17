@@ -1,102 +1,14 @@
-# striver-snippets 
+# striver-snippets
 
-一个 vscode 代码片段插件，包含js ts tsx css less scss 的常用snippets，便于日后开发。
+一个 vscode 代码片段插件，包含 js ts tsx css 的常用 snippets，便于平时开发工作。
 
-## 代码片段使用指南
-
-### JavaScript/TypeScript/React 相关代码片段
-
-#### 日志输出
-- `clo==` - 输出带有等号分隔的对象日志
-  ```javascript
-  console.log('=======object=======', object);
-  ```
-- `clo=t` - 输出带有等号分隔的文本日志
-  ```javascript
-  console.log('=======text=======');
-  ```
-
-#### 导入语句
-- `im less` - 导入 Less 模块
-  ```javascript
-  import styles from './index.module.less';
-  ```
-- `im classNames` - 导入 classNames 库
-  ```javascript
-  import classNames from 'classnames';
-  ```
-- `imr` - 导入 React
-  ```javascript
-  import React from 'react';
-  ```
-
-#### React 组件模板
-- `rfcd` - 创建默认导出的 React 函数组件
-- `rfc` - 创建命名导出的 React 函数组件
-
-#### React Hooks
-- `useStateSnippet` - 创建 useState Hook
-- `useEffectSnippet` - 创建 useEffect Hook
-- `useContextSnippet` - 创建 useContext Hook
-- `useMemoSnippet` - 创建 useMemo Hook
-- `useRefSnippet` - 创建 useRef Hook
-- `useImperativeHandleSnippet` - 创建 useImperativeHandle Hook
-- `useCallbackSnippet` - 创建 useCallback Hook
-- `useLayoutEffectSnippet` - 创建 useLayoutEffect Hook
-- `useReducerSnippet` - 创建 useReducer Hook
-- `useLockFnSnippet` - 创建异步锁函数
-
-### CSS 相关代码片段
-
-- `t-ell` - 单行文本溢出省略
-  ```css
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  ```
-- `t-ell-more` - 多行文本溢出省略
-  ```css
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  ```
-- `f-center` - Flex 布局居中
-  ```css
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ```
-
-### 公司专用代码片段
-
-- `e c useColumns` - 创建表格列配置 Hook
-  ```typescript
-  import { IColumnType } from '@/components/common';
-
-  export const useColumns = (): {
-    topSearchColumns: IColumnType[];
-    tableColumns: IColumnType[];
-  } => {
-    const topSearchColumns: IColumnType[] = [];
-    const tableColumns: IColumnType[] = [];
-
-    return {
-      topSearchColumns,
-      tableColumns,
-    };
-  };
-  ```
-
-## 使用方法
+## 🎯 使用方法
 
 1. 在 VSCode 中安装此插件
 2. 在相应的文件类型中输入上述代码片段的前缀
 3. 按下 Tab 键或 Enter 键即可插入对应的代码片段
 
-## 支持的文件类型
+## 🎯 支持的文件类型
 
 - JavaScript (.js)
 - TypeScript (.ts)
@@ -105,3 +17,58 @@
 - Less (.less)
 - SCSS (.scss)
 
+## 📋 代码片段使用指南
+
+### JavaScript/TypeScript/React 相关代码片段
+
+#### 日志相关
+
+| 触发前缀 | 描述                   | 代码示例                                       |
+| -------- | ---------------------- | ---------------------------------------------- |
+| `clo==`  | 带分隔符的对象日志输出 | `console.log('=======object=======', object);` |
+| `clo=t`  | 带分隔符的文本日志输出 | `console.log('=======object=======');`         |
+
+#### 导入导出相关
+
+| 触发前缀        | 描述               | 代码示例                                    |
+| --------------- | ------------------ | ------------------------------------------- |
+| `im less`       | 导入 less 样式文件 | `import styles from './index.module.less';` |
+| `im classNames` | 导入 classNames 库 | `import classNames from 'classnames';`      |
+| `imr`           | 导入 React         | `import React from 'react';`                |
+
+#### React 组件相关
+
+| 触发前缀 | 描述                          | 代码示例                     |
+| -------- | ----------------------------- | ---------------------------- |
+| `rfcd`   | 创建默认导出的 React 函数组件 | 代码较长，请使用触发前缀查看 |
+| `rfc`    | 创建导出的 React 函数组件     | 代码较长，请使用触发前缀查看 |
+
+#### Hooks 相关
+
+| 触发前缀                     | 描述                           | 代码示例                                                     |
+| ---------------------------- | ------------------------------ | ------------------------------------------------------------ |
+| `useStateSnippet`            | React useState Hook            | `const [first, setFirst] = useState(second)`                 |
+| `useEffectSnippet`           | React useEffect Hook           | `useEffect(() => { first }, [second])`                       |
+| `useContextSnippet`          | React useContext Hook          | `const first = useContext(second)`                           |
+| `useMemoSnippet`             | React useMemo Hook             | `useMemo(() => first, [second])`                             |
+| `useRefSnippet`              | React useRef Hook              | `const first = useRef(second)`                               |
+| `useImperativeHandleSnippet` | React useImperativeHandle Hook | 代码较长，请使用触发前缀查看                                 |
+| `useCallbackSnippet`         | React useCallback Hook         | `const first = useCallback(second, [third])`                 |
+| `useLayoutEffectSnippet`     | React useLayoutEffect Hook     | `useLayoutEffect(() => { first }, [second])`                 |
+| `useReducerSnippet`          | React useReducer Hook          | `const [state, dispatch] = useReducer(first, second, third)` |
+| `useLockFnSnippet`           | useLockFn Hook                 | `const first = useLockFn(async () => { second })`            |
+
+### CSS 相关代码片段
+
+| 触发前缀     | 描述             | 代码示例                                                          |
+| ------------ | ---------------- | ----------------------------------------------------------------- |
+| `t-ell`      | 单行文本超出省略 | `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;` |
+| `t-ell-more` | 多行文本超出省略 | 代码较长，请使用触发前缀查看                                      |
+| `f-center`   | CSS Flex 居中    | `display: flex; justify-content: center; align-items: center;`    |
+
+### 公司专用代码片段
+
+| 触发前缀         | 描述                | 代码示例                     |
+| ---------------- | ------------------- | ---------------------------- |
+| `ecUseColumns`   | useColumns 报表配置 | 代码较长，请使用触发前缀查看 |
+| `baseReportPage` | 报表组件 snippet    | 代码较长，请使用触发前缀查看 |
