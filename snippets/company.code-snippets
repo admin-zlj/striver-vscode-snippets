@@ -4,16 +4,28 @@
    *
    */
   "export const useColumns": {
-    "prefix": "e c useColumns",
+    "prefix": "ecUseColumns",
     "body": [
       "import { IColumnType } from '@/components/common';",
       "",
-      "export const useColumns = ($1): {",
+      "export const ${1:useColumns} = ($2): {",
       "  topSearchColumns: IColumnType[];",
       "  tableColumns: IColumnType[];",
       "} => {",
-      "  const topSearchColumns: IColumnType[] = [];",
-      "  const tableColumns: IColumnType[] = [];",
+      "  const topSearchColumns: IColumnType[] = [",
+      "    {",
+      "      dataIndex: 'name',",
+      "      title: '名称',",
+      "      search: true,",
+      "    }",
+      "  ];",
+      "  const tableColumns: IColumnType[] = [",
+      "    {",
+      "      dataIndex: 'name',",
+      "      title: '名称',",
+      "      width: 200,",
+      "    }",
+      "  ];",
       "",
       "  return {",
       "    topSearchColumns,",
@@ -22,5 +34,33 @@
       "};"
     ],
     "description": "useColumns 报表配置"
+  },
+
+  "report page": {
+    "prefix": "baseReportPage",
+    "body": [
+      "import BaseReportPage from '@/components/base-report-page';",
+      "",
+      "/**",
+      " * xx列表",
+      " */",
+      "const Index = () => {",
+      "  const { topSearchColumns, tableColumns } = useColumns();",
+      "  return (",
+      "    <BaseReportPage",
+      "      queryApi={api}",
+      "      topSearchColumns={topSearchColumns}",
+      "      tableColumns={tableColumns}",
+      "      formatListData={(dat) => ({",
+      "        list: dat?.data?.data,",
+      "        total: dat?.data?.totalNum,",
+      "      })}",
+      "    />",
+      "  );",
+      "};",
+      "",
+      "export default Index;"
+    ],
+    "description": "报表组件 snippet"
   }
 }
