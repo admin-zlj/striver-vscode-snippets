@@ -1,6 +1,11 @@
 # Change Log
 
-“striver-snippets”扩展的所有显著更改都将记录在此文件中。
+“striver-snippets” 扩展的所有更改都将记录在此文件中。
+
+# 0.0.2
+
+- 初始化一些 snippets
 
 # 0.0.1
+
 - 初始化
