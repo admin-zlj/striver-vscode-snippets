@@ -1,0 +1,137 @@
+{
+  /**
+   * js ts 代码片段
+   */
+  "log ====": {
+    "prefix": "clo==",
+    "body": ["console.log('=======${1:object}=======', ${1:object});"],
+    "description": "log object ====;"
+  },
+
+  "log Text": {
+    "prefix": "clo=t",
+    "body": ["console.log('=======${1:object}=======');"],
+    "description": "log Text;"
+  },
+
+  /**
+   * 导入导出相关
+   */
+  "import less": {
+    "prefix": "im less",
+    "body": ["import styles from './index.module.less';"],
+    "description": "import less"
+  },
+
+  "import classNames": {
+    "prefix": "im classNames",
+    "body": ["import classNames from 'classnames';"],
+    "description": "import classNames"
+  },
+
+  "import React": {
+    "prefix": "imr",
+    "body": ["import React from 'react';"],
+    "description": "import React"
+  },
+
+  /**
+   * tsx 相关
+   */
+  "export default React Function ": {
+    "prefix": "rfcd",
+    "body": [
+      "import React from 'react';",
+      "",
+      "const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = () => {",
+      "\treturn (",
+      "\t\t<div>",
+      "\t\t\t$1",
+      "\t\t</div>",
+      "\t);",
+      "}",
+      "",
+      "export default ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/};",
+      ""
+    ]
+  },
+  "export const React Function": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "",
+      "export const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = () => {",
+      "\treturn (",
+      "\t\t<div>",
+      "\t\t\t$1",
+      "\t\t</div>",
+      "\t);",
+      "}",
+      "",
+      ""
+    ]
+  },
+
+  /**
+   * hooks 相关 在这里
+   */
+  "useState": {
+    "prefix": "useStateSnippet",
+    "body": ["const [${1:first}, set${1/(.*)/${1:/capitalize}/}] = useState(${2:second})"],
+    "description": "useState"
+  },
+
+  "useEffect": {
+    "prefix": "useEffectSnippet",
+    "body": ["useEffect(() => {", "  ${1:first}", "", "}, [${2:second}])", ""],
+    "description": "useEffect"
+  },
+
+  "useContext": {
+    "prefix": "useContextSnippet",
+    "body": ["const ${1:first} = useContext(${2:second})"],
+    "description": "useContext"
+  },
+
+  "useMemo": {
+    "prefix": "useMemoSnippet",
+    "body": ["useMemo(() => ${1:first}, [${2:second}])"],
+    "description": "useMemo"
+  },
+
+  "useRef": {
+    "prefix": "useRefSnippet",
+    "body": ["const ${1:first} = useRef(${2:second})"],
+    "description": "useRef"
+  },
+
+  "useImperativeHandle": {
+    "prefix": "useImperativeHandleSnippet",
+    "body": ["useImperativeHandle(", "  ${1:first},", "  () => {", "    ${2:second}", "  },", "  [${3:third}],", ")"],
+    "description": "useImperativeHandle"
+  },
+
+  "useCallback": {
+    "prefix": "useCallbackSnippet",
+    "body": ["const ${1:first} = useCallback(${2:second}, [${3:third}])"],
+    "description": "useCallback"
+  },
+
+  "useLayoutEffect": {
+    "prefix": "useLayoutEffectSnippet",
+    "body": ["useLayoutEffect(() => {", "  ${1:first}", "", "}, [${2:second}])"],
+    "description": "useLayoutEffect"
+  },
+
+  "useReducer": {
+    "prefix": "useReducerSnippet",
+    "body": ["const [state, dispatch] = useReducer(${1:first}, ${2:second}, ${3:third})"],
+    "description": "useReducer"
+  },
+
+  "useLockFn": {
+    "prefix": "useLockFnSnippet",
+    "body": ["const  ${1:first}  = useLockFn(async () => {", "  ${2:second}", "})"],
+    "description": "useLockFn"
+  }
+}

@@ -1,3 +1,26 @@
 {
-	
+  /**
+   * 公司的代码片段
+   *
+   */
+  "export const useColumns": {
+    "prefix": "e c useColumns",
+    "body": [
+      "import { IColumnType } from '@/components/common';",
+      "",
+      "export const useColumns = ($1): {",
+      "  topSearchColumns: IColumnType[];",
+      "  tableColumns: IColumnType[];",
+      "} => {",
+      "  const topSearchColumns: IColumnType[] = [];",
+      "  const tableColumns: IColumnType[] = [];",
+      "",
+      "  return {",
+      "    topSearchColumns,",
+      "    tableColumns,",
+      "  };",
+      "};"
+    ],
+    "description": "useColumns 报表配置"
+  }
 }
