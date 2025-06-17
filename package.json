@@ -1,14 +1,28 @@
 {
   "name": "striver-snippets",
   "displayName": "striver-snippets",
-  "description": "",
+  "description": "一个 vscode 代码片段插件，包含js ts tsx css less scss 的常用snippets，便于平时开发。",
   "version": "0.0.1",
+  "publisher": "径遂",
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": "^1.8.0"
   },
+  "license": "BSD-3-Clause",
   "categories": [
     "Snippets"
   ],
+  "keywords": [
+    "snippets",
+    "code snippets",
+    "js snippets",
+    "ts snippets",
+    "tsx snippets",
+    "react snippets",
+    "striver-snippets",
+    "striver"
+  ],
+  "repository": "https://github.com/admin-zlj/striver-vscode-snippets.git",
+  "icon": "./icon/logo.png",
   "contributes": {
     "snippets": [
       {
