@@ -1,23 +1,23 @@
-# Welcome to your VS Code Extension
+# 欢迎使用您的 VS 代码扩展
 
-## What's in the folder
+## 文件夹中有什么
 
-* This folder contains all of the files necessary for your extension.
-* `package.json` - this is the manifest file that defines the location of the snippet file and specifies the language of the snippets.
-* `snippets/snippets.code-snippets` - the file containing all snippets.
+- 此文件夹包含扩展名所需的所有文件。
+- `package.json `-这是一个清单文件，它定义了代码段文件的位置并指定了代码段的语言。
+- “snippets/snippets.code snippets”-包含所有代码段的文件。
 
-## Get up and running straight away
+## 启动
 
-* Press `F5` to open a new window with your extension loaded.
-* Create a new file with a file name suffix matching your language.
-* Verify that your snippets are proposed on IntelliSense.
+- 按“F5”打开一个加载了您的扩展的新窗口。
+- 使用与您的语言匹配的文件名后缀创建一个新文件。
+- 验证您的代码段是否在 IntelliSense 上提出。
 
-## Make changes
+## 进行更改
 
-* You can relaunch the extension from the debug toolbar after making changes to the files listed above.
-* You can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes.
+- 对上面列出的文件进行更改后，您可以从调试工具栏重新启动扩展。
+- 您还可以使用扩展程序重新加载（Mac 上的“Ctrl+R”或“Cmd+R”）VS Code 窗口以加载更改。
 
-## Install your extension
+## 安装您的扩展
 
-* To start using your extension with Visual Studio Code copy it into the `<user home>/.vscode/extensions` folder and restart Code.
-* To share your extension with the world, read on https://code.visualstudio.com/api/working-with-extensions/publishing-extension about publishing an extension.
+- 若要开始在 Visual Studio Code 中使用扩展，请将其复制到“<user home>/.vscode/extensions”文件夹中，然后重新启动 Code。
+- 要与全世界分享您的扩展程序，请继续阅读https://code.visualstudio.com/api/working-with-extensions/publishing-extension关于发布扩展。
