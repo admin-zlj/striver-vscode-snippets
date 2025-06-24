@@ -8,13 +8,13 @@
     "body": ["overflow: hidden;", "text-overflow: ellipsis;", "white-space: nowrap;"],
     "description": "text ellipsis 文本超出省略"
   },
-
+// 
   "Text Ellipsis More": {
     "prefix": "t-ell-more",
     "body": [
       "overflow: hidden;",
       "text-overflow: ellipsis;",
-      "white-space: nowrap;",
+      "white-space: wrap;",
       "display: -webkit-box;",
       "-webkit-line-clamp: ${1:2};",
       "-webkit-box-orient: vertical;"
