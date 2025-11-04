@@ -3,13 +3,13 @@
    * js ts 代码片段
    */
   "log ====": {
-    "prefix": "clo==",
+    "prefix": "cll",
     "body": ["console.log('=======${1:object}=======', ${1:object});"],
     "description": "log object ====;"
   },
 
   "log Text": {
-    "prefix": "clo=t",
+    "prefix": "cllt",
     "body": ["console.log('=======${1:object}=======');"],
     "description": "log Text;"
   },
