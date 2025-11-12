@@ -51,6 +51,7 @@
       "      queryApi={api}",
       "      topSearchColumns={topSearchColumns}",
       "      tableColumns={tableColumns}",
+	  "      tablePageSize={20}",
       "      formatListData={(dat) => ({",
       "        list: dat?.data?.data,",
       "        total: dat?.data?.totalNum,",
