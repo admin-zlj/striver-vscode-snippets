@@ -32,8 +32,8 @@ on:
 jobs:
   # 任务名称：发布
   publish:
-    # 限制条件：只允许在 master 分支上运行，防止误在其他分支发布
-    if: github.ref == 'refs/heads/master'
+    # 限制条件：只允许在 main 分支上运行，防止误在其他分支发布
+    if: github.ref == 'refs/heads/main' 
     # 运行环境：使用最新版 Ubuntu 系统
     runs-on: ubuntu-latest
 
