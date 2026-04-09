@@ -1,0 +1,310 @@
+# ==========================================
+# VSCode 插件自动发布工作流
+# 功能：手动触发，自动递增版本号并发布到 VSCode Marketplace
+# ==========================================
+
+# 工作流名称，显示在 GitHub Actions 页面
+name: Publish VSCode Extension
+
+# 触发条件配置
+on:
+  # 使用手动触发方式（在 GitHub Actions 页面点击 Run workflow）
+  workflow_dispatch:
+    # 手动触发时需要输入的参数
+    inputs:
+      # 参数名称
+      version:
+        # 参数描述，显示在触发弹窗中
+        description: '版本更新类型'
+        # 是否必填
+        required: true
+        # 默认值
+        default: 'patch'
+        # 输入类型为下拉选择
+        type: choice
+        # 下拉选项
+        options:
+          - patch   # 补丁版本：修复 Bug，1.0.0 → 1.0.1
+          - minor   # 次版本：新增功能，1.0.0 → 1.1.0
+          - major   # 主版本：重大变更，1.0.0 → 2.0.0
+
+# 定义工作流中的所有任务
+jobs:
+  # 任务名称：发布
+  publish:
+    # 限制条件：只允许在 master 分支上运行，防止误在其他分支发布
+    if: github.ref == 'refs/heads/master'
+    # 运行环境：使用最新版 Ubuntu 系统
+    runs-on: ubuntu-latest
+
+    # 权限配置
+    permissions:
+      # 赋予写入权限，用于提交版本号变更和创建 Release
+      contents: write
+
+    # 任务步骤列表
+    steps:
+      # ----------------------------------------
+      # Step 1: 检出代码
+      # ----------------------------------------
+      - name: Checkout
+        # 使用官方检出 Action，版本 v4
+        uses: actions/checkout@v4
+        with:
+          # 获取完整的 git 历史记录，用于后续生成 CHANGELOG
+          fetch-depth: 0
+          # 使用 GitHub 自动生成的 Token 进行身份验证
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ----------------------------------------
+      # Step 2: 配置 Node.js 环境
+      # ----------------------------------------
+      - name: Setup Node.js
+        # 使用官方 Node.js 配置 Action
+        uses: actions/setup-node@v4
+        with:
+          # 指定 Node.js 版本
+          node-version: '18'
+          # 启用 npm 缓存，加快依赖安装速度
+          cache: 'npm'
+
+      # ----------------------------------------
+      # Step 3: 配置 Git 用户信息
+      # ----------------------------------------
+      - name: Configure Git
+        run: |
+          # 设置 Git 提交用户名，使用 GitHub Bot 账号
+          git config user.name "github-actions[bot]"
+          # 设置 Git 提交邮箱，使用 GitHub Bot 邮箱
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # ----------------------------------------
+      # Step 4: 安装项目依赖
+      # ----------------------------------------
+      - name: Install dependencies
+        # 使用 npm ci 而不是 npm install，更适合 CI 环境
+        # ci 命令会严格按照 package-lock.json 安装，保证版本一致性
+        run: npm ci
+
+      # ----------------------------------------
+      # Step 5: 编译构建项目
+      # ----------------------------------------
+      - name: Build
+        # 执行 package.json 中定义的 compile 脚本，将 TypeScript 编译为 JavaScript
+        run: npm run compile
+
+      # ----------------------------------------
+      # Step 6: 读取当前版本号
+      # ----------------------------------------
+      - name: Get current version
+        # 设置步骤 ID，供后续步骤引用此步骤的输出
+        id: current_version
+        run: |
+          # 从 package.json 中读取当前版本号
+          CURRENT=$(node -p "require('./package.json').version")
+          # 将版本号写入 GITHUB_OUTPUT，供后续步骤使用
+          echo "CURRENT=$CURRENT" >> $GITHUB_OUTPUT
+          # 打印当前版本号到日志
+          echo "📦 当前版本: $CURRENT"
+
+      # ----------------------------------------
+      # Step 7: 计算下一个版本号
+      # ----------------------------------------
+      - name: Calculate next version
+        # 设置步骤 ID，供后续步骤引用此步骤的输出
+        id: next_version
+        run: |
+          # 获取上一步输出的当前版本号
+          CURRENT="${{ steps.current_version.outputs.CURRENT }}"
+          # 获取用户选择的版本更新类型（patch/minor/major）
+          TYPE="${{ github.event.inputs.version }}"
+
+          # 将版本号按 . 分割，提取 major、minor、patch 三段数字
+          MAJOR=$(echo $CURRENT | cut -d. -f1)   # 取第一段，主版本号
+          MINOR=$(echo $CURRENT | cut -d. -f2)   # 取第二段，次版本号
+          PATCH=$(echo $CURRENT | cut -d. -f3)   # 取第三段，补丁版本号
+
+          # 根据用户选择的类型，计算新版本号
+          if [ "$TYPE" = "major" ]; then
+            MAJOR=$((MAJOR + 1))   # 主版本号 +1
+            MINOR=0                # 次版本号归零
+            PATCH=0                # 补丁版本号归零
+          elif [ "$TYPE" = "minor" ]; then
+            MINOR=$((MINOR + 1))   # 次版本号 +1
+            PATCH=0                # 补丁版本号归零
+          else
+            PATCH=$((PATCH + 1))   # 补丁版本号 +1
+          fi
+
+          # 拼接新版本号
+          NEXT="$MAJOR.$MINOR.$PATCH"
+          # 将新版本号写入 GITHUB_OUTPUT，供后续步骤使用
+          echo "NEXT=$NEXT" >> $GITHUB_OUTPUT
+          # 打印新版本号到日志
+          echo "📈 新版本: $NEXT"
+
+      # ----------------------------------------
+      # Step 8: 更新 package.json 中的版本号
+      # ----------------------------------------
+      - name: Update version in package.json
+        run: |
+          # 使用 npm version 命令更新版本号
+          # --no-git-tag-version 表示不自动创建 git commit 和 tag，由后续步骤手动处理
+          npm version ${{ steps.next_version.outputs.NEXT }} --no-git-tag-version
+          # 打印确认信息
+          echo "✅ package.json 已更新为 ${{ steps.next_version.outputs.NEXT }}"
+
+      # ----------------------------------------
+      # Step 9: 自动生成 CHANGELOG
+      # ----------------------------------------
+      - name: Generate CHANGELOG
+        # 设置步骤 ID
+        id: changelog
+        run: |
+          # 获取新版本号
+          VERSION="${{ steps.next_version.outputs.NEXT }}"
+          # 获取当前日期，格式：YYYY-MM-DD
+          DATE=$(date +"%Y-%m-%d")
+          
+          # 获取上一个 git tag，用于确定提交范围
+          # 如果没有历史 tag，则返回空字符串
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "上一个 Tag: $LAST_TAG"
+
+          # 根据是否有历史 tag，决定获取哪个范围的提交记录
+          if [ -z "$LAST_TAG" ]; then
+            # 没有历史 tag，获取所有提交记录
+            COMMITS=$(git log --pretty=format:"%s|%h" HEAD)
+          else
+            # 有历史 tag，只获取上一个 tag 到现在的提交记录
+            COMMITS=$(git log --pretty=format:"%s|%h" ${LAST_TAG}..HEAD)
+          fi
+
+          # 初始化三个分类变量，用于存储不同类型的提交信息
+          FEATURES=""   # 新功能类提交
+          FIXES=""      # Bug 修复类提交
+          OTHERS=""     # 其他类提交
+
+          # 遍历所有提交记录，按提交信息前缀进行分类
+          while IFS='|' read -r MSG HASH; do
+            # 跳过空行
+            [ -z "$MSG" ] && continue
+            # 匹配 feat 开头的提交（新功能）
+            if echo "$MSG" | grep -qiE "^feat(\(.+\))?!?:"; then
+              FEATURES="$FEATURES\n- $MSG ($HASH)"
+            # 匹配 fix 开头的提交（Bug 修复）
+            elif echo "$MSG" | grep -qiE "^fix(\(.+\))?!?:"; then
+              FIXES="$FIXES\n- $MSG ($HASH)"
+            # 其余提交归入其他变更
+            else
+              OTHERS="$OTHERS\n- $MSG ($HASH)"
+            fi
+          done <<< "$COMMITS"
+
+          # 开始构建 CHANGELOG 内容，添加版本标题和日期
+          CONTENT="## v$VERSION ($DATE)\n\n"
+
+          # 如果有新功能类提交，添加新功能章节
+          if [ -n "$FEATURES" ]; then
+            CONTENT="${CONTENT}### ✨ 新功能\n${FEATURES}\n\n"
+          fi
+          # 如果有 Bug 修复类提交，添加修复章节
+          if [ -n "$FIXES" ]; then
+            CONTENT="${CONTENT}### 🐛 Bug 修复\n${FIXES}\n\n"
+          fi
+          # 如果有其他类提交，添加其他变更章节
+          if [ -n "$OTHERS" ]; then
+            CONTENT="${CONTENT}### 📝 其他变更\n${OTHERS}\n\n"
+          fi
+
+          # 将新内容追加到 CHANGELOG.md 顶部
+          if [ -f CHANGELOG.md ]; then
+            # 文件已存在，读取旧内容并将新内容插入到顶部
+            OLD=$(cat CHANGELOG.md)
+            printf "%b\n%s" "$CONTENT" "$OLD" > CHANGELOG.md
+          else
+            # 文件不存在，直接创建并写入内容
+            printf "%b" "$CONTENT" > CHANGELOG.md
+          fi
+
+          # 将本次的 release notes 单独保存到临时文件，供创建 GitHub Release 时使用
+          printf "%b" "$CONTENT" > /tmp/release_notes.md
+          echo "✅ CHANGELOG 已生成"
+
+      # ----------------------------------------
+      # Step 10: 提交版本变更并推送
+      # ----------------------------------------
+      - name: Commit and push changes
+        run: |
+          # 将修改的文件添加到暂存区
+          git add package.json package-lock.json CHANGELOG.md
+          # 提交变更，提交信息包含新版本号
+          git commit -m "chore: release v${{ steps.next_version.outputs.NEXT }}"
+          # 创建 git tag，格式为 v版本号
+          git tag v${{ steps.next_version.outputs.NEXT }}
+          # 推送代码到远程仓库
+          git push
+          # 推送 tag 到远程仓库
+          git push origin v${{ steps.next_version.outputs.NEXT }}
+          echo "✅ 已提交并推送 Tag: v${{ steps.next_version.outputs.NEXT }}"
+
+      # ----------------------------------------
+      # Step 11: 安装 vsce 打包工具
+      # ----------------------------------------
+      - name: Install vsce
+        # 全局安装 VSCode 官方扩展打包发布工具
+        run: npm install -g @vscode/vsce
+
+      # ----------------------------------------
+      # Step 12: 打包扩展为 .vsix 文件
+      # ----------------------------------------
+      - name: Package
+        # 执行打包命令，生成 .vsix 安装包文件
+        run: vsce package
+
+      # ----------------------------------------
+      # Step 13: 发布到 VSCode Marketplace
+      # ----------------------------------------
+      - name: Publish to VSCode Marketplace
+        # 使用存储在 Secrets 中的 PAT Token 进行身份验证并发布
+        # VSCE_PAT 需要在 GitHub 仓库的 Settings → Secrets 中配置
+        run: vsce publish -p ${{ secrets.VSCE_PAT }}
+
+      # ----------------------------------------
+      # Step 14: 创建 GitHub Release
+      # ----------------------------------------
+      - name: Create GitHub Release
+        # 使用第三方 Action 创建 Release
+        uses: softprops/action-gh-release@v1
+        with:
+          # 关联的 tag 名称
+          tag_name: v${{ steps.next_version.outputs.NEXT }}
+          # Release 标题
+          name: Release v${{ steps.next_version.outputs.NEXT }}
+          # Release 描述内容，使用之前生成的 release notes 文件
+          body_path: /tmp/release_notes.md
+          # 将打包好的 .vsix 文件作为附件上传
+          files: '*.vsix'
+        env:
+          # 提供 GitHub Token 用于创建 Release
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ----------------------------------------
+      # Step 15: 输出发布结果汇总
+      # ----------------------------------------
+      - name: Summary
+        run: |
+          # 向 GitHub Actions 的 Summary 页面写入发布结果表格
+          echo "## 🎉 发布成功" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          # 输出 Markdown 表格
+          echo "| 项目 | 内容 |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          # 显示旧版本号
+          echo "| 旧版本 | v${{ steps.current_version.outputs.CURRENT }} |" >> $GITHUB_STEP_SUMMARY
+          # 显示新版本号
+          echo "| 新版本 | v${{ steps.next_version.outputs.NEXT }} |" >> $GITHUB_STEP_SUMMARY
+          # 显示更新类型
+          echo "| 更新类型 | ${{ github.event.inputs.version }} |" >> $GITHUB_STEP_SUMMARY
+          # 显示发布时间
+          echo "| 发布时间 | $(date '+%Y-%m-%d %H:%M:%S') |" >> $GITHUB_STEP_SUMMARY
